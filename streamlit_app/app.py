@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils import api
 import os
-from typing import Literal
+from typing import Literal, Optional
 
 # --- Page Configuration ---
 st.set_page_config(
