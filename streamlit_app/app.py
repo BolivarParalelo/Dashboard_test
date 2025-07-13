@@ -190,14 +190,20 @@ else:
             with col3:
                 binance_trade_type = st.selectbox("Trade Type", ("BUY", "SELL"), key="binance_trade_type")
 
-            if st.button("Fetch Binance Offers", key="fetch_binance"):
-                with st.spinner("Fetching Binance offers..."):
-                    binance_offers = api.get_binance_offers(binance_fiat, binance_asset, binance_trade_type)
-                    if binance_offers:
-                        df_binance = pd.DataFrame(binance_offers)
-                        st.dataframe(df_binance, use_container_width=True)
-                    else:
-                        st.warning("No Binance offers found for the selected criteria or an error occurred.")
+            col_buttons_binance = st.columns(2)
+            with col_buttons_binance[0]:
+                if st.button("Fetch Binance Offers", key="fetch_binance"):
+                    with st.spinner("Fetching Binance offers..."):
+                        binance_offers = api.get_binance_offers(binance_fiat, binance_asset, binance_trade_type)
+                        if binance_offers:
+                            df_binance = pd.DataFrame(binance_offers)
+                            st.dataframe(df_binance, use_container_width=True)
+                        else:
+                            st.warning("No Binance offers found for the selected criteria or an error occurred.")
+            with col_buttons_binance[1]:
+                if st.button("Refresh Binance Offers", key="refresh_binance"):
+                    api.get_binance_offers.clear()
+                    st.rerun() # Rerun to re-fetch data after clearing cache
 
     elif selected_exchange == "Bybit":
         with tab_bybit:
@@ -214,14 +220,20 @@ else:
                 # Convert to API expected format
                 bybit_side_api = "1" if bybit_side == "BUY" else "0"
 
-            if st.button("Fetch Bybit Offers", key="fetch_bybit"):
-                with st.spinner("Fetching Bybit offers..."):
-                    bybit_offers = api.get_bybit_offers(bybit_currency, bybit_token, bybit_side_api)
-                    if bybit_offers:
-                        df_bybit = pd.DataFrame(bybit_offers)
-                        st.dataframe(df_bybit, use_container_width=True)
-                    else:
-                        st.warning("No Bybit offers found for the selected criteria or an error occurred.")
+            col_buttons_bybit = st.columns(2)
+            with col_buttons_bybit[0]:
+                if st.button("Fetch Bybit Offers", key="fetch_bybit"):
+                    with st.spinner("Fetching Bybit offers..."):
+                        bybit_offers = api.get_bybit_offers(bybit_currency, bybit_token, bybit_side_api)
+                        if bybit_offers:
+                            df_bybit = pd.DataFrame(bybit_offers)
+                            st.dataframe(df_bybit, use_container_width=True)
+                        else:
+                            st.warning("No Bybit offers found for the selected criteria or an error occurred.")
+            with col_buttons_bybit[1]:
+                if st.button("Refresh Bybit Offers", key="refresh_bybit"):
+                    api.get_bybit_offers.clear()
+                    st.rerun() # Rerun to re-fetch data after clearing cache
 
     st.markdown("---")
     st.subheader("Market Insights (Coming Soon!)")
